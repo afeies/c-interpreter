@@ -3,7 +3,16 @@
 #include <stdio.h>
 %}
 
+/* Pattern definitions */
+DIGIT       [0-9]
+LETTER      [a-zA-Z_]
+IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
+
 %%
+"int"           { printf("KEYWORD: %s\n", yytext); }
+
+{IDENTIFIER}    { printf("IDENTIFIER: %s\n", yytext); }
+
 [0-9]+          { printf("NUMBER: %s\n", yytext); }
 "+"             { printf("PLUS\n"); }
 "-"             { printf("MINUS\n"); }
