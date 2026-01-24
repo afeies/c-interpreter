@@ -1,0 +1,27 @@
+%{
+/* DEFINITIONS SECTION - C code between %{ and %} */
+#include <stdio.h>
+%}
+
+%%
+[0-9]+          { printf("NUMBER: %s\n", yytext); }
+"+"             { printf("PLUS\n"); }
+"-"             { printf("MINUS\n"); }
+"*"             { printf("MULTIPLY\n"); }
+"/"             { printf("DIVIDE\n"); }
+"("             { printf("LPAREN\n"); }
+")"             { printf("RPAREN\n"); }
+[ \t\n]         { /* skip whitespace */ }
+.               { printf("UNKNOWN: %s\n", yytext); }
+
+%%
+/* USER CODE SECTION - additional C functions */
+
+int main() {
+    yylex();  /* Start tokenizing */
+    return 0;
+}
+
+int yywrap() {
+    return 1;  /* Return 1 when done with input */
+}

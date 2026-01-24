@@ -7,3 +7,8 @@ I want to learn how to write a very simple c-interpreter in C. Write a prompt fo
 Update the plan to use flex and bison
 
 Explain how to use flex to tokenize a very simple file, no code yet
+
+### Added calc.l
+Generate the tokenizer: flex calc.l
+Compile the generated C code: gcc lex.yy.c -o calc
+Run it: ./calc
