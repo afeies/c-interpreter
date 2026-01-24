@@ -12,3 +12,5 @@ Explain how to use flex to tokenize a very simple file, no code yet
 Generate the tokenizer: flex calc.l
 Compile the generated C code: gcc lex.yy.c -o calc
 Run it: ./calc
+
+Create a makefile for this project
