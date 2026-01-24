@@ -12,4 +12,7 @@ build/calc: build/lex.yy.c
 clean:
 	rm -rf build
 
-.PHONY: all clean
+test: build/calc
+	./build/calc < factorial.c
+
+.PHONY: all clean test
