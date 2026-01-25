@@ -1,18 +1,18 @@
-all: build/calc
+all: build/cint
 
 build:
 	mkdir -p build
 
-build/lex.yy.c: calc.l | build
-	flex -o build/lex.yy.c calc.l
+build/lex.yy.c: clang.l | build
+	flex -o build/lex.yy.c clang.l
 
-build/calc: build/lex.yy.c
-	gcc build/lex.yy.c -o build/calc
+build/cint: build/lex.yy.c
+	gcc build/lex.yy.c -o build/cint
 
 clean:
 	rm -rf build
 
-test: build/calc
-	./build/calc < factorial.c
+test: build/cint
+	./build/cint < factorial.c
 
 .PHONY: all clean test
