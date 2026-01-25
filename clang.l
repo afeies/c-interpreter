@@ -18,8 +18,21 @@ IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 "-"             { printf("MINUS\n"); }
 "*"             { printf("MULTIPLY\n"); }
 "/"             { printf("DIVIDE\n"); }
+
+"<"             { printf("LESS_THAN\n"); }
+">"             { printf("GREATER_THAN\n"); }
+"<="            { printf("LESS_EQUAL\n"); }
+">="            { printf("GREATER_EQUAL\n"); }
+"="             { printf("ASSIGN\n"); }
+
 "("             { printf("LPAREN\n"); }
 ")"             { printf("RPAREN\n"); }
+
+"{"             { printf("LBRACE\n"); }
+"}"             { printf("RBRACE\n"); }
+
+";"             { printf("SEMICOLON\n"); }
+
 [ \t\n]         { /* skip whitespace */ }
 .               { printf("UNKNOWN: %s\n", yytext); }
 
