@@ -39,11 +39,6 @@ IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 %%
 /* USER CODE SECTION - additional C functions */
 
-int main() {
-    yylex();  /* Start tokenizing */
-    return 0;
-}
-
 int yywrap() {
     return 1;  /* Return 1 when done with input */
 }
