@@ -49,14 +49,14 @@ extern FILE *yyin;
 
 /* Token declarations */
 %token <num> NUMBER
-%token NEWLINE
+%token PLUS MINUS MULT DIV LT GT LE GE ASSIGN LPAREN RPAREN LBRACE RBRACE SEMICOLON NEWLINE
 
 /* Non-terminal types */
 %type <node> expression term factor
 
 /* Operator precedence and associativity (lowest to highest) */
-%left '+' '-'
-%left '*' '/'
+%left PLUS MINUS
+%left MULT DIV
 %right UMINUS  /* Unary minus */
 
 %%
@@ -84,10 +84,10 @@ expression:
     term {
         $$ = $1;
     }
-    | expression '+' expression {
+    | expression PLUS expression {
         $$ = make_binop('+', $1, $3);
     }
-    | expression '-' expression {
+    | expression MINUS expression {
         $$ = make_binop('-', $1, $3);
     }
     ;
@@ -96,10 +96,10 @@ term:
     factor {
         $$ = $1;
     }
-    | term '*' term {
+    | term MULT term {
         $$ = make_binop('*', $1, $3);
     }
-    | term '/' term {
+    | term DIV term {
         $$ = make_binop('/', $1, $3);
     }
     ;
@@ -108,10 +108,10 @@ factor:
     NUMBER {
         $$ = make_number($1);
     }
-    | '(' expression ')' {
+    | LPAREN expression RPAREN {
         $$ = $2;
     }
-    | '-' factor %prec UMINUS {
+    | MINUS factor %prec UMINUS {
         $$ = make_binop('-', make_number(0), $2);
     }
     ;

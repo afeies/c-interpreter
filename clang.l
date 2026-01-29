@@ -16,24 +16,24 @@ IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 {IDENTIFIER}    { /* identifier - not yet used by parser */ }
 
 [0-9]+          { yylval.num = atof(yytext); return NUMBER; }
-"+"             { return '+'; }
-"-"             { return '-'; }
-"*"             { return '*'; }
-"/"             { return '/'; }
+"+"             { return PLUS; }
+"-"             { return MINUS; }
+"*"             { return MULT; }
+"/"             { return DIV; }
 
-"<"             { /* comparison - not yet used by parser */ }
-">"             { /* comparison - not yet used by parser */ }
-"<="            { /* comparison - not yet used by parser */ }
-">="            { /* comparison - not yet used by parser */ }
-"="             { /* assignment - not yet used by parser */ }
+"<"             { return LT; }
+">"             { return GT; }
+"<="            { return LE; }
+">="            { return GE; }
+"="             { return ASSIGN; }
 
-"("             { return '('; }
-")"             { return ')'; }
+"("             { return LPAREN; }
+")"             { return RPAREN; }
 
-"{"             { /* brace - not yet used by parser */ }
-"}"             { /* brace - not yet used by parser */ }
+"{"             { return LBRACE; }
+"}"             { return RBRACE; }
 
-";"             { /* semicolon - not yet used by parser */ }
+";"             { return SEMICOLON; }
 
 [ \t]+          { /* skip whitespace */ }
 \n              { return NEWLINE; }
