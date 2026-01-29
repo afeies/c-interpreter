@@ -1,6 +1,8 @@
 %{
 /* DEFINITIONS SECTION - C code between %{ and %} */
 #include <stdio.h>
+#include <stdlib.h>
+#include "expr.tab.h"
 %}
 
 /* Pattern definitions */
@@ -9,32 +11,33 @@ LETTER      [a-zA-Z_]
 IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 
 %%
-"int"           { printf("KEYWORD: %s\n", yytext); }
+"int"           { /* keyword - not yet used by parser */ }
 
-{IDENTIFIER}    { printf("IDENTIFIER: %s\n", yytext); }
+{IDENTIFIER}    { /* identifier - not yet used by parser */ }
 
-[0-9]+          { printf("NUMBER: %s\n", yytext); }
-"+"             { printf("PLUS\n"); }
-"-"             { printf("MINUS\n"); }
-"*"             { printf("MULTIPLY\n"); }
-"/"             { printf("DIVIDE\n"); }
+[0-9]+          { yylval.num = atof(yytext); return NUMBER; }
+"+"             { return '+'; }
+"-"             { return '-'; }
+"*"             { return '*'; }
+"/"             { return '/'; }
 
-"<"             { printf("LESS_THAN\n"); }
-">"             { printf("GREATER_THAN\n"); }
-"<="            { printf("LESS_EQUAL\n"); }
-">="            { printf("GREATER_EQUAL\n"); }
-"="             { printf("ASSIGN\n"); }
+"<"             { /* comparison - not yet used by parser */ }
+">"             { /* comparison - not yet used by parser */ }
+"<="            { /* comparison - not yet used by parser */ }
+">="            { /* comparison - not yet used by parser */ }
+"="             { /* assignment - not yet used by parser */ }
 
-"("             { printf("LPAREN\n"); }
-")"             { printf("RPAREN\n"); }
+"("             { return '('; }
+")"             { return ')'; }
 
-"{"             { printf("LBRACE\n"); }
-"}"             { printf("RBRACE\n"); }
+"{"             { /* brace - not yet used by parser */ }
+"}"             { /* brace - not yet used by parser */ }
 
-";"             { printf("SEMICOLON\n"); }
+";"             { /* semicolon - not yet used by parser */ }
 
-[ \t\n]         { /* skip whitespace */ }
-.               { printf("UNKNOWN: %s\n", yytext); }
+[ \t]+          { /* skip whitespace */ }
+\n              { return NEWLINE; }
+.               { /* ignore unknown characters for now */ }
 
 %%
 /* USER CODE SECTION - additional C functions */

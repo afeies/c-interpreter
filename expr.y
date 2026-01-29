@@ -44,7 +44,7 @@ extern FILE *yyin;
 /* Union to hold semantic values */
 %union {
     double num;
-    ASTNode *node;
+    struct ASTNode *node;
 }
 
 /* Token declarations */

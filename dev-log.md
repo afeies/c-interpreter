@@ -14,3 +14,19 @@ Compile the generated C code: gcc lex.yy.c -o calc
 Run it: ./calc
 
 Create a makefile for this project
+
+### expr.y
+enum: grouping integer constants (type safety)
+union: different types share same memory space
+- either get the number or get binop struct
+function declarations: without them, you can only call functions that are defined earlier in the file (forward references)
+```c
+$$: LHS
+$1, $2, $3: RHS placeholders
+%prec: precedence left and right
+free_ast(root): make a new AST for every line
+```
+
+### Additional notes
+lexer: defines the tokens and returns them to the parser
+parser: matching rules using tokens and builds a tree

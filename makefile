@@ -9,8 +9,8 @@ build/lex.yy.c: clang.l | build
 build/expr.tab.c build/expr.tab.h: expr.y | build
 	bison -d expr.y -o build/expr.tab.c
 
-build/cint: build/lex.yy.c build/expr.tab.c
-	gcc build/lex.yy.c build/expr.tab.c -o build/cint
+build/cint: build/lex.yy.c build/expr.tab.c build/expr.tab.h
+	gcc -I build build/lex.yy.c build/expr.tab.c -o build/cint
 
 clean:
 	rm -rf build
