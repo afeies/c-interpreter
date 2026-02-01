@@ -35,7 +35,8 @@ void free_ast(ASTNode *node);
 ASTNode *root = NULL;
 
 /* Forward declarations for flex/bison */
-int yylex(void);
+int yylex_impl(void);  /* Real lexer from flex */
+int yylex(void);       /* Our wrapper */
 void yyerror(const char *s);
 extern FILE *yyin;
 
@@ -120,6 +121,42 @@ factor:
     ;
 
 %%
+
+/* Token name lookup */
+const char* token_name(int token) {
+    switch(token) {
+        case NUMBER: return "NUMBER";
+        case PLUS: return "PLUS";
+        case MINUS: return "MINUS";
+        case MULT: return "MULT";
+        case DIV: return "DIV";
+        case LT: return "LT";
+        case GT: return "GT";
+        case LE: return "LE";
+        case GE: return "GE";
+        case ASSIGN: return "ASSIGN";
+        case LPAREN: return "LPAREN";
+        case RPAREN: return "RPAREN";
+        case LBRACE: return "LBRACE";
+        case RBRACE: return "RBRACE";
+        case SEMICOLON: return "SEMICOLON";
+        case NEWLINE: return "NEWLINE";
+        default: return "UNKNOWN";
+    }
+}
+
+/* Wrapper to print tokens */
+int yylex(void) {
+    int token = yylex_impl();
+    if (token != 0) {
+        printf("TOKEN: %s", token_name(token));
+        if (token == NUMBER) {
+            printf(" (%g)", yylval.num);
+        }
+        printf("\n");
+    }
+    return token;
+}
 
 /* AST Constructor Functions */
 

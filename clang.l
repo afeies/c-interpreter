@@ -6,6 +6,9 @@
 
 /* Macro to track line numbers for each token */
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
+
+/* Rename yylex to yylex_impl so we can wrap it */
+#define yylex yylex_impl
 %}
 
 /* Enable line number tracking */
