@@ -48,11 +48,13 @@ extern FILE *yyin;
 /* Union to hold semantic values */
 %union {
     double num;
+    char *str;
     struct ASTNode *node;
 }
 
 /* Token declarations */
 %token <num> NUMBER
+%token <str> IDENTIFIER
 %token INT
 %token PLUS MINUS MULT DIV LT GT LE GE ASSIGN LPAREN RPAREN LBRACE RBRACE SEMICOLON NEWLINE
 
@@ -127,6 +129,7 @@ factor:
 const char* token_name(int token) {
     switch(token) {
         case NUMBER: return "NUMBER";
+        case IDENTIFIER: return "IDENTIFIER";
         case INT: return "INT";
         case PLUS: return "PLUS";
         case MINUS: return "MINUS";
@@ -154,6 +157,8 @@ int yylex(void) {
         printf("TOKEN: %s", token_name(token));
         if (token == NUMBER) {
             printf(" (%g)", yylval.num);
+        } else if (token == IDENTIFIER) {
+            printf(" (%s)", yylval.str);
         }
         printf("\n");
     }

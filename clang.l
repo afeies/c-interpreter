@@ -2,6 +2,7 @@
 /* DEFINITIONS SECTION - C code between %{ and %} */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "expr.tab.h"
 
 /* Macro to track line numbers for each token */
@@ -22,7 +23,7 @@ IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 %%
 "int"           { return INT; }
 
-{IDENTIFIER}    { /* identifier - not yet used by parser */ }
+{IDENTIFIER}    { yylval.str = strdup(yytext); return IDENTIFIER; }
 
 [0-9]+          { yylval.num = atof(yytext); return NUMBER; }
 "+"             { return PLUS; }
