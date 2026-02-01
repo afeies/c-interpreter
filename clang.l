@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "expr.tab.h"
+#include "clang.tab.h"
 
 /* Macro to track line numbers for each token */
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;

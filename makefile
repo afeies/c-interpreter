@@ -6,11 +6,11 @@ build:
 build/lex.yy.c: clang.l | build
 	flex -o build/lex.yy.c clang.l
 
-build/expr.tab.c build/expr.tab.h: expr.y | build
-	bison -d expr.y -o build/expr.tab.c
+build/clang.tab.c build/clang.tab.h: clang.y | build
+	bison -d clang.y -o build/clang.tab.c
 
-build/cint: build/lex.yy.c build/expr.tab.c build/expr.tab.h
-	gcc -I build build/lex.yy.c build/expr.tab.c -o build/cint
+build/cint: build/lex.yy.c build/clang.tab.c build/clang.tab.h
+	gcc -I build build/lex.yy.c build/clang.tab.c -o build/cint
 
 clean:
 	rm -rf build
