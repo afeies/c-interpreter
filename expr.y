@@ -53,6 +53,7 @@ extern FILE *yyin;
 
 /* Token declarations */
 %token <num> NUMBER
+%token INT
 %token PLUS MINUS MULT DIV LT GT LE GE ASSIGN LPAREN RPAREN LBRACE RBRACE SEMICOLON NEWLINE
 
 /* Non-terminal types */
@@ -126,6 +127,7 @@ factor:
 const char* token_name(int token) {
     switch(token) {
         case NUMBER: return "NUMBER";
+        case INT: return "INT";
         case PLUS: return "PLUS";
         case MINUS: return "MINUS";
         case MULT: return "MULT";

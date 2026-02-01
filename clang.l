@@ -20,7 +20,7 @@ LETTER      [a-zA-Z_]
 IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 
 %%
-"int"           { /* keyword - not yet used by parser */ }
+"int"           { return INT; }
 
 {IDENTIFIER}    { /* identifier - not yet used by parser */ }
 
