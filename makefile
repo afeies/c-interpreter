@@ -16,6 +16,6 @@ clean:
 	rm -rf build
 
 test: build/cint
-	./build/cint < expr.c
+	./build/cint < factorial.c
 
 .PHONY: all clean test

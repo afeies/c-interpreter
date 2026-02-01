@@ -41,6 +41,9 @@ extern FILE *yyin;
 
 %}
 
+/* Enable location tracking */
+%locations
+
 /* Union to hold semantic values */
 %union {
     double num;
@@ -198,9 +201,9 @@ void free_ast(ASTNode *node) {
     free(node);
 }
 
-/* Error handling */
+/* Error handling with line number */
 void yyerror(const char *s) {
-    fprintf(stderr, "Parse error: %s\n", s);
+    fprintf(stderr, "Parse error at line %d: %s\n", yylloc.first_line, s);
 }
 
 /* Main function */

@@ -3,7 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "expr.tab.h"
+
+/* Macro to track line numbers for each token */
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 %}
+
+/* Enable line number tracking */
+%option yylineno
 
 /* Pattern definitions */
 DIGIT       [0-9]
