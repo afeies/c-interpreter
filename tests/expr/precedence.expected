@@ -1,0 +1,17 @@
+Expression Parser with AST
+Enter expressions (Ctrl+D to quit):
+TOKEN: NUMBER (2)
+TOKEN: PLUS
+TOKEN: NUMBER (3)
+TOKEN: MULT
+TOKEN: NUMBER (4)
+TOKEN: NEWLINE
+AST Structure:
+BINOP: +
+  NUMBER: 2
+  BINOP: *
+    NUMBER: 3
+    NUMBER: 4
+
+Result: 14
+

@@ -16,6 +16,12 @@ clean:
 	rm -rf build
 
 test: build/cint
-	./build/cint < factorial.c
+	@bash tests/run_tests.sh
 
-.PHONY: all clean test
+test-verbose: build/cint
+	@bash tests/run_tests.sh --verbose
+
+run-expr: build/cint
+	./build/cint < expr.c
+
+.PHONY: all clean test test-verbose run-expr
