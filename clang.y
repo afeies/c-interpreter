@@ -55,8 +55,15 @@ extern FILE *yyin;
 /* Token declarations */
 %token <num> NUMBER
 %token <str> IDENTIFIER
-%token INT
-%token PLUS MINUS MULT DIV LT GT LE GE ASSIGN LPAREN RPAREN LBRACE RBRACE SEMICOLON NEWLINE
+%token INT VOID SIZEOF IF ELSE WHILE FOR RETURN
+%token PLUS MINUS MULT DIV MOD
+%token LT GT LE GE EQ NE ASSIGN
+%token AND OR NOT
+%token BITAND BITOR BITXOR BITNOT LSHIFT RSHIFT
+%token LPAREN RPAREN LBRACE RBRACE SEMICOLON NEWLINE
+%token PLUS_ASSIGN MINUS_ASSIGN MULT_ASSIGN DIV_ASSIGN MOD_ASSIGN
+%token INC DEC
+%token COMMA STRING_LITERAL CHAR_CONSTANT
 
 /* Non-terminal types */
 %type <node> expression term factor
@@ -135,17 +142,39 @@ const char* token_name(int token) {
         case MINUS: return "MINUS";
         case MULT: return "MULT";
         case DIV: return "DIV";
+        case MOD: return "MOD";
         case LT: return "LT";
         case GT: return "GT";
         case LE: return "LE";
         case GE: return "GE";
+        case EQ: return "EQ";
+        case NE: return "NE";
         case ASSIGN: return "ASSIGN";
+        case AND: return "AND";
+        case OR: return "OR";
+        case NOT: return "NOT";
+        case BITAND: return "BITAND";
+        case BITOR: return "BITOR";
+        case BITXOR: return "BITXOR";
+        case BITNOT: return "BITNOT";
+        case LSHIFT: return "LSHIFT";
+        case RSHIFT: return "RSHIFT";
         case LPAREN: return "LPAREN";
         case RPAREN: return "RPAREN";
         case LBRACE: return "LBRACE";
         case RBRACE: return "RBRACE";
         case SEMICOLON: return "SEMICOLON";
         case NEWLINE: return "NEWLINE";
+        case PLUS_ASSIGN: return "PLUS_ASSIGN";
+        case MINUS_ASSIGN: return "MINUS_ASSIGN";
+        case MULT_ASSIGN: return "MULT_ASSIGN";
+        case DIV_ASSIGN: return "DIV_ASSIGN";
+        case MOD_ASSIGN: return "MOD_ASSIGN";
+        case INC: return "INC";
+        case DEC: return "DEC";
+        case COMMA: return "COMMA";
+        case STRING_LITERAL: return "STRING_LITERAL";
+        case CHAR_CONSTANT: return "CHAR_CONSTANT";
         default: return "UNKNOWN";
     }
 }
