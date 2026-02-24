@@ -15,6 +15,9 @@ build/cint: build/lex.yy.c build/clang.tab.c build/clang.tab.h
 clean:
 	rm -rf build
 
+fact: build/cint
+	./build/cint < factorial.c
+
 test: build/cint
 	@bash tests/run_tests.sh
 

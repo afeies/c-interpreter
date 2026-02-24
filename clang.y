@@ -1,4 +1,4 @@
-/* expr.y - Expression parser with AST construction */
+/* clang.y - Expression parser with AST construction */
 
 %{
 #include <stdio.h>

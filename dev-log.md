@@ -15,7 +15,7 @@ Run it: ./calc
 
 Create a makefile for this project
 
-### expr.y
+### clang.y
 enum: grouping integer constants (type safety)
 union: different types share same memory space
 - either get the number or get binop struct
@@ -30,3 +30,4 @@ free_ast(root): make a new AST for every line
 ### Additional notes
 lexer: defines the tokens and returns them to the parser
 parser: matching rules using tokens and builds a tree
+./build/cint: interpreter
