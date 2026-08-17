@@ -86,15 +86,10 @@ extern FILE *yyin;
 
 /* Grammar Rules */
 
+/* Building the tree is all the parser does. main() runs it afterwards, once
+   yyparse() has confirmed the whole input actually parsed. */
 program:
-    statement_list {
-        root = $1;
-        printf("AST Structure:\n");
-        print_ast(root, 0);
-        printf("\nResult: %d\n\n", eval_ast(root));
-        free_ast(root);
-        root = NULL;
-    }
+    statement_list { root = $1; }
     ;
 
 statement_list:
@@ -355,12 +350,26 @@ int main(int argc, char **argv) {
     
     printf("Expression Parser with AST\n");
     printf("Enter expressions (Ctrl+D to quit):\n");
-    
-    yyparse();
-    
+
+    int status = yyparse();
+
     if (argc > 1) {
         fclose(yyin);
     }
-    
+
+    /* On a parse error the tree is incomplete, so don't run it. */
+    if (status != 0) {
+        free_ast(root);
+        root = NULL;
+        return 1;
+    }
+
+    printf("AST Structure:\n");
+    print_ast(root, 0);
+    printf("\nResult: %d\n\n", eval_ast(root));
+
+    free_ast(root);
+    root = NULL;
+
     return 0;
 }
