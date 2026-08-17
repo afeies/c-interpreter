@@ -3,7 +3,7 @@ Enter expressions (Ctrl+D to quit):
 TOKEN: NUMBER (1)
 TOKEN: PLUS
 TOKEN: NUMBER (2)
-TOKEN: NEWLINE
+TOKEN: SEMICOLON
 AST Structure:
 BINOP: +
   NUMBER: 1
