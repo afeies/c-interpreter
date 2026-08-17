@@ -9,7 +9,8 @@
 typedef enum {
     NODE_NUMBER,
     NODE_BINOP,
-    NODE_BLOCK
+    NODE_BLOCK,
+    NODE_SCOPE
 } NodeType;
 
 /* AST Node Structure */
@@ -27,6 +28,9 @@ typedef struct ASTNode {
             int count;
             int capacity;
         } block;
+        struct {
+            struct ASTNode *body;   /* the statement_list inside the braces */
+        } scope;
     } data;
 } ASTNode;
 
@@ -34,6 +38,7 @@ typedef struct ASTNode {
 ASTNode* make_number(int value);
 ASTNode* make_binop(char op, ASTNode *left, ASTNode *right);
 ASTNode* make_block(void);
+ASTNode* make_scope(ASTNode *body);
 void block_append(ASTNode *block, ASTNode *stmt);
 void print_ast(ASTNode *node, int indent);
 int eval_ast(ASTNode *node);
@@ -103,7 +108,7 @@ statement:
     ;
 
 block:
-    LBRACE statement_list RBRACE  { $$ = $2; }
+    LBRACE statement_list RBRACE  { $$ = make_scope($2); }
     ;
 
 expression:
@@ -207,24 +212,24 @@ int yylex(void) {
 
 /* AST Constructor Functions */
 
-ASTNode* make_number(int value) {
+static ASTNode* new_node(NodeType type) {
     ASTNode *node = (ASTNode*)malloc(sizeof(ASTNode));
     if (!node) {
         fprintf(stderr, "Out of memory\n");
         exit(1);
     }
-    node->type = NODE_NUMBER;
+    node->type = type;
+    return node;
+}
+
+ASTNode* make_number(int value) {
+    ASTNode *node = new_node(NODE_NUMBER);
     node->data.number = value;
     return node;
 }
 
 ASTNode* make_binop(char op, ASTNode *left, ASTNode *right) {
-    ASTNode *node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (!node) {
-        fprintf(stderr, "Out of memory\n");
-        exit(1);
-    }
-    node->type = NODE_BINOP;
+    ASTNode *node = new_node(NODE_BINOP);
     node->data.binop.op = op;
     node->data.binop.left = left;
     node->data.binop.right = right;
@@ -232,15 +237,16 @@ ASTNode* make_binop(char op, ASTNode *left, ASTNode *right) {
 }
 
 ASTNode* make_block(void) {
-    ASTNode *node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (!node) {
-        fprintf(stderr, "Out of memory\n");
-        exit(1);
-    }
-    node->type = NODE_BLOCK;
+    ASTNode *node = new_node(NODE_BLOCK);
     node->data.block.items = NULL;
     node->data.block.count = 0;
     node->data.block.capacity = 0;
+    return node;
+}
+
+ASTNode* make_scope(ASTNode *body) {
+    ASTNode *node = new_node(NODE_SCOPE);
+    node->data.scope.body = body;
     return node;
 }
 
@@ -280,6 +286,9 @@ void print_ast(ASTNode *node, int indent) {
         for (int i = 0; i < node->data.block.count; i++) {
             print_ast(node->data.block.items[i], indent + 1);
         }
+    } else if (node->type == NODE_SCOPE) {
+        printf("SCOPE\n");
+        print_ast(node->data.scope.body, indent + 1);
     }
 }
 
@@ -313,6 +322,11 @@ int eval_ast(ASTNode *node) {
             result = eval_ast(node->data.block.items[i]);
         }
         return result;
+    } else if (node->type == NODE_SCOPE) {
+        /* push_scope() goes here once the symbol table exists */
+        int result = eval_ast(node->data.scope.body);
+        /* pop_scope() goes here */
+        return result;
     }
     return 0;
 }
@@ -329,6 +343,8 @@ void free_ast(ASTNode *node) {
             free_ast(node->data.block.items[i]);
         }
         free(node->data.block.items);
+    } else if (node->type == NODE_SCOPE) {
+        free_ast(node->data.scope.body);
     }
     free(node);
 }
