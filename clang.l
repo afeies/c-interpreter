@@ -37,7 +37,7 @@ IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 
 {IDENTIFIER}    { yylval.str = strdup(yytext); return IDENTIFIER; }
 
-[0-9]+          { yylval.num = atof(yytext); return NUMBER; }
+[0-9]+          { yylval.num = atoi(yytext); return NUMBER; }
 
 "//".*          { /* skip single-line comments */ }
 "/*"([^*]|(\*+[^*/]))*\*+"/"    { /* skip multi-line comments */ }

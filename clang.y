@@ -16,7 +16,7 @@ typedef enum {
 typedef struct ASTNode {
     NodeType type;
     union {
-        double number;
+        int number;
         struct {
             char op;  /* '+', '-', '*', '/' */
             struct ASTNode *left;
@@ -31,12 +31,12 @@ typedef struct ASTNode {
 } ASTNode;
 
 /* Function declarations */
-ASTNode* make_number(double value);
+ASTNode* make_number(int value);
 ASTNode* make_binop(char op, ASTNode *left, ASTNode *right);
 ASTNode* make_block(void);
 void block_append(ASTNode *block, ASTNode *stmt);
 void print_ast(ASTNode *node, int indent);
-double eval_ast(ASTNode *node);
+int eval_ast(ASTNode *node);
 void free_ast(ASTNode *node);
 
 /* Global root of the AST */
@@ -55,7 +55,7 @@ extern FILE *yyin;
 
 /* Union to hold semantic values */
 %union {
-    double num;
+    int num;
     char *str;
     struct ASTNode *node;
 }
@@ -91,7 +91,7 @@ program:
         root = $1;
         printf("AST Structure:\n");
         print_ast(root, 0);
-        printf("\nResult: %g\n\n", eval_ast(root));
+        printf("\nResult: %d\n\n", eval_ast(root));
         free_ast(root);
         root = NULL;
     }
@@ -201,7 +201,7 @@ int yylex(void) {
     if (token != 0) {
         printf("TOKEN: %s", token_name(token));
         if (token == NUMBER) {
-            printf(" (%g)", yylval.num);
+            printf(" (%d)", yylval.num);
         } else if (token == IDENTIFIER) {
             printf(" (%s)", yylval.str);
         }
@@ -212,7 +212,7 @@ int yylex(void) {
 
 /* AST Constructor Functions */
 
-ASTNode* make_number(double value) {
+ASTNode* make_number(int value) {
     ASTNode *node = (ASTNode*)malloc(sizeof(ASTNode));
     if (!node) {
         fprintf(stderr, "Out of memory\n");
@@ -275,7 +275,7 @@ void print_ast(ASTNode *node, int indent) {
     for (int i = 0; i < indent; i++) printf("  ");
     
     if (node->type == NODE_NUMBER) {
-        printf("NUMBER: %g\n", node->data.number);
+        printf("NUMBER: %d\n", node->data.number);
     } else if (node->type == NODE_BINOP) {
         printf("BINOP: %c\n", node->data.binop.op);
         print_ast(node->data.binop.left, indent + 1);
@@ -289,14 +289,14 @@ void print_ast(ASTNode *node, int indent) {
 }
 
 /* Evaluate AST */
-double eval_ast(ASTNode *node) {
+int eval_ast(ASTNode *node) {
     if (!node) return 0;
     
     if (node->type == NODE_NUMBER) {
         return node->data.number;
     } else if (node->type == NODE_BINOP) {
-        double left = eval_ast(node->data.binop.left);
-        double right = eval_ast(node->data.binop.right);
+        int left = eval_ast(node->data.binop.left);
+        int right = eval_ast(node->data.binop.right);
         
         switch (node->data.binop.op) {
             case '+': return left + right;
@@ -313,7 +313,7 @@ double eval_ast(ASTNode *node) {
                 exit(1);
         }
     } else if (node->type == NODE_BLOCK) {
-        double result = 0;
+        int result = 0;
         for (int i = 0; i < node->data.block.count; i++) {
             result = eval_ast(node->data.block.items[i]);
         }
