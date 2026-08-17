@@ -1,0 +1,24 @@
+Expression Parser with AST
+Enter expressions (Ctrl+D to quit):
+TOKEN: LBRACE
+TOKEN: NUMBER (1)
+TOKEN: SEMICOLON
+TOKEN: LBRACE
+TOKEN: NUMBER (2)
+TOKEN: SEMICOLON
+TOKEN: NUMBER (3)
+TOKEN: SEMICOLON
+TOKEN: RBRACE
+TOKEN: RBRACE
+AST Structure:
+BLOCK (1 statements)
+  SCOPE
+    BLOCK (2 statements)
+      NUMBER: 1
+      SCOPE
+        BLOCK (2 statements)
+          NUMBER: 2
+          NUMBER: 3
+
+Result: 3
+

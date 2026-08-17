@@ -1,0 +1,11 @@
+Expression Parser with AST
+Enter expressions (Ctrl+D to quit):
+TOKEN: LBRACE
+TOKEN: RBRACE
+AST Structure:
+BLOCK (1 statements)
+  SCOPE
+    BLOCK (0 statements)
+
+Result: 0
+
