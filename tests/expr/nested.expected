@@ -16,17 +16,18 @@ TOKEN: MINUS
 TOKEN: NUMBER (1)
 TOKEN: SEMICOLON
 AST Structure:
-BINOP: *
+BLOCK (1 statements)
   BINOP: *
-    BINOP: +
+    BINOP: *
+      BINOP: +
+        NUMBER: 1
+        NUMBER: 2
+      BINOP: +
+        NUMBER: 5
+        NUMBER: 6
+    BINOP: -
+      NUMBER: 0
       NUMBER: 1
-      NUMBER: 2
-    BINOP: +
-      NUMBER: 5
-      NUMBER: 6
-  BINOP: -
-    NUMBER: 0
-    NUMBER: 1
 
 Result: -33
 

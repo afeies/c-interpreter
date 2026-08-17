@@ -9,11 +9,12 @@ TOKEN: MULT
 TOKEN: NUMBER (4)
 TOKEN: SEMICOLON
 AST Structure:
-BINOP: *
-  BINOP: +
-    NUMBER: 2
-    NUMBER: 3
-  NUMBER: 4
+BLOCK (1 statements)
+  BINOP: *
+    BINOP: +
+      NUMBER: 2
+      NUMBER: 3
+    NUMBER: 4
 
 Result: 20
 

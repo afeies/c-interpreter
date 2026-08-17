@@ -8,7 +8,8 @@
 /* AST Node Types */
 typedef enum {
     NODE_NUMBER,
-    NODE_BINOP
+    NODE_BINOP,
+    NODE_BLOCK
 } NodeType;
 
 /* AST Node Structure */
@@ -21,12 +22,19 @@ typedef struct ASTNode {
             struct ASTNode *left;
             struct ASTNode *right;
         } binop;
+        struct {
+            struct ASTNode **items;
+            int count;
+            int capacity;
+        } block;
     } data;
 } ASTNode;
 
 /* Function declarations */
 ASTNode* make_number(double value);
 ASTNode* make_binop(char op, ASTNode *left, ASTNode *right);
+ASTNode* make_block(void);
+void block_append(ASTNode *block, ASTNode *stmt);
 void print_ast(ASTNode *node, int indent);
 double eval_ast(ASTNode *node);
 void free_ast(ASTNode *node);
@@ -67,6 +75,7 @@ extern FILE *yyin;
 
 /* Non-terminal types */
 %type <node> expression term factor
+%type <node> statement_list statement block
 
 /* Operator precedence and associativity (lowest to highest) */
 %left PLUS MINUS
@@ -78,16 +87,7 @@ extern FILE *yyin;
 /* Grammar Rules */
 
 program:
-    statement_list
-    ;
-
-statement_list:
-    /* empty */
-    | statement_list statement
-    ;
-
-statement:
-    expression SEMICOLON {
+    statement_list {
         root = $1;
         printf("AST Structure:\n");
         print_ast(root, 0);
@@ -95,6 +95,21 @@ statement:
         free_ast(root);
         root = NULL;
     }
+    ;
+
+statement_list:
+    /* empty */                 { $$ = make_block(); }
+    | statement_list statement  { block_append($1, $2); $$ = $1; }
+    ;
+
+statement:
+    expression SEMICOLON  { $$ = $1; }
+    | block               { $$ = $1; }
+    ;
+
+block:
+    LBRACE statement_list RBRACE  { $$ = $2; }
+    ;
 
 expression:
     term {
@@ -221,6 +236,38 @@ ASTNode* make_binop(char op, ASTNode *left, ASTNode *right) {
     return node;
 }
 
+ASTNode* make_block(void) {
+    ASTNode *node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (!node) {
+        fprintf(stderr, "Out of memory\n");
+        exit(1);
+    }
+    node->type = NODE_BLOCK;
+    node->data.block.items = NULL;
+    node->data.block.count = 0;
+    node->data.block.capacity = 0;
+    return node;
+}
+
+/* Append a statement to a block, growing the array as needed */
+void block_append(ASTNode *block, ASTNode *stmt) {
+    if (!stmt) return;  /* empty statements contribute nothing */
+
+    if (block->data.block.count == block->data.block.capacity) {
+        int new_capacity = block->data.block.capacity ? block->data.block.capacity * 2 : 4;
+        ASTNode **items = (ASTNode**)realloc(block->data.block.items,
+                                             new_capacity * sizeof(ASTNode*));
+        if (!items) {
+            fprintf(stderr, "Out of memory\n");
+            exit(1);
+        }
+        block->data.block.items = items;
+        block->data.block.capacity = new_capacity;
+    }
+
+    block->data.block.items[block->data.block.count++] = stmt;
+}
+
 /* Print AST (for visualization) */
 void print_ast(ASTNode *node, int indent) {
     if (!node) return;
@@ -233,6 +280,11 @@ void print_ast(ASTNode *node, int indent) {
         printf("BINOP: %c\n", node->data.binop.op);
         print_ast(node->data.binop.left, indent + 1);
         print_ast(node->data.binop.right, indent + 1);
+    } else if (node->type == NODE_BLOCK) {
+        printf("BLOCK (%d statements)\n", node->data.block.count);
+        for (int i = 0; i < node->data.block.count; i++) {
+            print_ast(node->data.block.items[i], indent + 1);
+        }
     }
 }
 
@@ -260,6 +312,12 @@ double eval_ast(ASTNode *node) {
                 fprintf(stderr, "Unknown operator: %c\n", node->data.binop.op);
                 exit(1);
         }
+    } else if (node->type == NODE_BLOCK) {
+        double result = 0;
+        for (int i = 0; i < node->data.block.count; i++) {
+            result = eval_ast(node->data.block.items[i]);
+        }
+        return result;
     }
     return 0;
 }
@@ -271,6 +329,11 @@ void free_ast(ASTNode *node) {
     if (node->type == NODE_BINOP) {
         free_ast(node->data.binop.left);
         free_ast(node->data.binop.right);
+    } else if (node->type == NODE_BLOCK) {
+        for (int i = 0; i < node->data.block.count; i++) {
+            free_ast(node->data.block.items[i]);
+        }
+        free(node->data.block.items);
     }
     free(node);
 }

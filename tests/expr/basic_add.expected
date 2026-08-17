@@ -5,9 +5,10 @@ TOKEN: PLUS
 TOKEN: NUMBER (2)
 TOKEN: SEMICOLON
 AST Structure:
-BINOP: +
-  NUMBER: 1
-  NUMBER: 2
+BLOCK (1 statements)
+  BINOP: +
+    NUMBER: 1
+    NUMBER: 2
 
 Result: 3
 

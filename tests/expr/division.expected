@@ -5,9 +5,10 @@ TOKEN: DIV
 TOKEN: NUMBER (3)
 TOKEN: SEMICOLON
 AST Structure:
-BINOP: /
-  NUMBER: 10
-  NUMBER: 3
+BLOCK (1 statements)
+  BINOP: /
+    NUMBER: 10
+    NUMBER: 3
 
 Result: 3.33333
 
