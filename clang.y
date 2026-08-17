@@ -60,7 +60,7 @@ extern FILE *yyin;
 %token LT GT LE GE EQ NE ASSIGN
 %token AND OR NOT
 %token BITAND BITOR BITXOR BITNOT LSHIFT RSHIFT
-%token LPAREN RPAREN LBRACE RBRACE SEMICOLON NEWLINE
+%token LPAREN RPAREN LBRACE RBRACE SEMICOLON
 %token PLUS_ASSIGN MINUS_ASSIGN MULT_ASSIGN DIV_ASSIGN MOD_ASSIGN
 %token INC DEC
 %token COMMA STRING_LITERAL CHAR_CONSTANT
@@ -77,14 +77,17 @@ extern FILE *yyin;
 
 /* Grammar Rules */
 
-input:
-    /* empty */
-    | input line
+program:
+    statement_list
     ;
 
-line:
-    NEWLINE
-    | expression NEWLINE {
+statement_list:
+    /* empty */
+    | statement_list statement
+    ;
+
+statement:
+    expression SEMICOLON {
         root = $1;
         printf("AST Structure:\n");
         print_ast(root, 0);
@@ -92,7 +95,6 @@ line:
         free_ast(root);
         root = NULL;
     }
-    ;
 
 expression:
     term {
@@ -164,7 +166,6 @@ const char* token_name(int token) {
         case LBRACE: return "LBRACE";
         case RBRACE: return "RBRACE";
         case SEMICOLON: return "SEMICOLON";
-        case NEWLINE: return "NEWLINE";
         case PLUS_ASSIGN: return "PLUS_ASSIGN";
         case MINUS_ASSIGN: return "MINUS_ASSIGN";
         case MULT_ASSIGN: return "MULT_ASSIGN";

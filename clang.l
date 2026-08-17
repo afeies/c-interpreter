@@ -93,8 +93,7 @@ IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
     return CHAR_CONSTANT; 
 }
 
-[ \t]+          { /* skip whitespace */ }
-\n              { return NEWLINE; }
+[ \t\n]+        { /* skip whitespace */ }
 .               { /* ignore unknown characters for now */ }
 
 
